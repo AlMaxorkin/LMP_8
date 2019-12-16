@@ -11,12 +11,14 @@ struct node {
 class List
 {
 	node* head;
+	int row;
+	int col;
 public:
 	node* getHead() { return head; }
-	List() : head(NULL) {};
-	~List();
-	void constructLinkedMatrix(int** mat, int m, int n);
+	List() : head(NULL), row(0), col(0) {};
+	List(int m, int n) : head(NULL), row(m), col(n) {};
+	void construct();
 	void show();
-	int volume(int n, int m);
+	int volume(int, int);
 };
 

@@ -7,11 +7,6 @@ node* newNode(int d)
 	return temp;
 }
 
-List::~List()
-{
-
-}
-
 void List::show()
 {
 	node* rp, * dp = head;
@@ -30,25 +25,26 @@ void List::show()
 	}
 }
 
-void List::constructLinkedMatrix(int** mat, int m, int n)
+void List::construct()
 {
-	node** rowhead = new node*[m];
-	node* righttemp =  NULL, *newptr = NULL;
+	head = NULL;
 
-	for (int i = 0; i < m; i++) {
+	node** arrhead = new node*[row];
+	node* righttemp = NULL, * newptr = NULL;
 
-		// initially set the head of ith row as NULL 
-		rowhead[i] = NULL;
-		for (int j = 0; j < n; j++) {
-			newptr = newNode(mat[i][j]);
+	for (int i = 0; i < row; i++) {
+		arrhead[i] = NULL;
+		for (int j = 0; j < col; j++) {
+			int x;
+			cin >> x;
+			newptr = newNode(x);
 
-			// stores the mat[0][0] node as 
-			// the mainhead of the linked list 
+
 			if (!head)
 				head = newptr;
 
-			if (!rowhead[i])
-				rowhead[i] = newptr;
+			if (!arrhead[i])
+				arrhead[i] = newptr;
 			else
 				righttemp->right = newptr;
 
@@ -56,36 +52,51 @@ void List::constructLinkedMatrix(int** mat, int m, int n)
 		}
 	}
 
-	// Then, for every ith and (i+1)th list, 
-	// we set the down pointers of 
-	// every node of ith list 
-	// with its corresponding 
-	// node of (i+1)th list 
-	for (int i = 0; i < m - 1; i++) 
-	{
+	for (int i = 0; i < row - 1; i++) {
 
-		node* temp1 = rowhead[i], * temp2 = rowhead[i + 1];
+		node* temp1 = arrhead[i], * temp2 = arrhead[i + 1];
 
-		while (temp1 && temp2) 
-		{
+		while (temp1 && temp2) {
 
 			temp1->down = temp2;
 			temp1 = temp1->right;
 			temp2 = temp2->right;
 		}
 	}
+
 }
 
-int List::volume(int n, int m)
+int List::volume(int x, int y)
 {
 	node* temp = head;
-	for (int i = 0; i < n - 1; i++)
-		temp = temp->right;
-
-	for (int j = 0; j < m - 1;j)
+	for (int i = 0; i < x - 2; i++)
 	{
-		j;
+		temp = temp->down;
+		for (int j = 0; j < y - 2; j++)
+		{
+			temp = temp->right;
+		}
 	}
 
+	if (x == 1 || y == 1 || x == row || y == col)
+		return 0;
 
+	int min = temp->right->data;
+
+	if (temp->down->data < min)
+		min = temp->down->data;
+	if (temp->down->data < min)
+		min = temp->down->data;
+	if (temp->right->right->down->data < min)
+		min = temp->right->right->down->data;
+	if (temp->down->down->right->data < min)
+		min = temp->down->down->right->data;
+
+	temp = temp->right->down;
+
+	if (temp->data >= min)
+		return 0;
+	else
+		return min;
 }
+
